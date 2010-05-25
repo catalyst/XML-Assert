@@ -17,27 +17,28 @@ Examples:
 * xpath_attr_is( '//TechnicalContact/Fax', 'CountryCode', 64, 'TechnicalContact Fax CountryCode is correct' );
 * xpath_text_is( '//AuditText', 'Audit text s1c1', 'AuditText is correct' );
 
-EXAMPLE XML COMPARISON
+EXAMPLE XML ASSERTIONS
 ======================
 
-For example, the following two documents should be considered semantically
-equal:
+For example, in the following document, you can assert a number of things, for
+example, that you expect one <content> element in the document, and that it's
+value is "Hello, World!":
 
+    my $xml = <<'EOF';
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-    <message xmlns="urn:message" type="simple">
+    <message type="simple">
       <!-- comment node -->
       <content>Hello, World!</content>
     </message>
+    EOF
 
-    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-    <msg:message xmlns:msg="urn:message" type="simple">
-      <!-- comment node -->
-      <msg:content>Hello, World!</msg:content>
-    </msg:message>
+    my $parser = XML::LibXML->new();
+    my $doc = $parser->parse_string( $xml )->documentElement();
+   
+    my $xml_assert = XML::Assert->new();
 
-Currently, far more complicated tests are being performed but this gives a
-small example of how different XML documents might be considered semantically
-the same.
+    $xml_assert->is_xpath_count($doc, '//content', 1);
+    $xml_assert->does_xpath_value_match($doc, '//content', 'Hello, World!')
 
 INSTALLATION
 ============
