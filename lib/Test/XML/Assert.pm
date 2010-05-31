@@ -89,19 +89,7 @@ Test::XML::Assert - Tests XPaths into an XML Document for correct values/matches
  my $xml2 = "<f:foo xmlns:f="urn:message"><f:bar baz="buzz">text</f:bar></f:foo>";
  my $xml3 = "<foo><bar baz="buzz">text</bar></foo>";
 
- # These will pass
- is_xml_same $xml1, $xml2;
-
- # These will fail
- is_xml_same $xml1, $xml3;
- is_xml_same $xml2, $xml3;
-
- # however, you can also check for failures, so these now succeed
- is_xml_different $xml1, $xml3;
- is_xml_different $xml2, $xml3;
-
- # ... and this fails
- is_xml_different $xml1, $xml2;
+ ToDo
 
 =head1 DESCRIPTION
 

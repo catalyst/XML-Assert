@@ -262,28 +262,10 @@ successful message.
 
 =over
 
-=item namespace_strict
+=item xmlns
 
-(Bool) If this property is set, then all the namespaces of both
-documents must match exactly.  The default, unset, raises an error
-only if the first document, C<$xml1>, has a namespace defined and this
-is different from C<$xml2>'s (or C<$xml2> has no namespace).
-
-=item error
-
-After the 'is_same' method is used, this will contain either the error
-string from the last comparison error, or C<undef>.
-
-=item ignore
-
-An array ref of XPath expressions to 'strip' from the documents before
-comparing.  This is implemented by evaluating each XPath expression at
-the beginning, then removing those nodes from any lists later found.
-
-=item ignore_xmlns
-
-A hashref of prefix => XMLNS, if you used namespaces on any of the
-'ignore' XPath entries.
+A hashref of prefix => XMLNS, if you have namespaces in the XML document or in
+the XPaths.
 
 =back
 
