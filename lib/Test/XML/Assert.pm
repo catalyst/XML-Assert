@@ -15,20 +15,13 @@ use XML::Assert;
 our @EXPORT = qw(
     is_xpath_count
     does_xpath_value_match
+    do_xpath_values_match
 );
 
 our $VERSION = '0.01';
 
 my $CLASS = __PACKAGE__;
-#my $TEST = Test::Builder->new();
 my $PARSER = XML::LibXML->new();
-
-#sub import {
-#	my $class = shift @_;
-#	Test::XML::Assert->export_to_level(1, $class);
-#	$TEST->exported_to(caller);
-#	$TEST->plan(@_) if @_;
-#}
 
 sub plan {
     my $tb = $CLASS->builder();
@@ -55,6 +48,19 @@ sub is_xpath_count($$$$;$) {
 }
 
 sub does_xpath_value_match($$$$;$) {
+    my ($doc, $xmlns, $xpath, $match, $name) = @_;
+
+    my $xml_assert = XML::Assert->new();
+    $xml_assert->xmlns($xmlns);
+
+    # do the test and remember the result
+    my $is_ok = $xml_assert->does_xpath_value_match($doc, $xpath, $match);
+
+    my $tb = $CLASS->builder();
+    return $tb->ok($is_ok, $name);
+}
+
+sub do_xpath_values_match($$$$;$) {
     my ($doc, $xmlns, $xpath, $match, $name) = @_;
 
     my $xml_assert = XML::Assert->new();
