@@ -236,25 +236,41 @@ node->text_value() to test for truth.
 
 =head1 SUBROUTINES
 
+Please note that all subroutines listed here that start with C<assert_*> throw
+an error if the assertion is not true. You'd expect this.
+
+Also note that there are a corresponding number of other methods for each
+C<assert_*> method which either return true or false and do not throw an
+error. Please be sure to use the correct version for what you need.
+
 =over 4
 
 =item assert_xpath_count($doc, $xpath, $count)
 
-Checks that there are $count nodes in the $doc that are returned by the
-$xpath.
+Checks that there are C<$count> nodes in the C<$doc> that are returned by the
+C<$xpath>. Throws an error if this is untrue.
 
 =item is_xpath_count($doc, $xpath, $count)
 
-This calls the method above but instead returns a truth value. If false, the
-reason can be gleaned from C<$xml_assert->error()>;
+Calls the above method but catches any error and instead returns a truth value.
 
-This is useful (for example) if you have some XML where an
-&lt;Error&gt; node is either present or missing. If present there has been an
-error. If the &lt;Error&gt; element is missing, it might be assumed to be a
-successful message.
+=item assert_xpath_value_match($doc, $xpath, $match)
 
-    my $xml_ok = q{<msg></msg>};
-    my $xml_err = q{<msg></msg>};
+Checks that C<$xpath> returns only one node and that node's value matches
+C<$match>.
+
+=item does_xpath_value_match($doc, $xpath, $match)
+
+Calls the above method but catches any error and instead returns a truth value.
+
+=item assert_xpath_values_match($doc, $xpath, $match)
+
+Checks that C<$xpath> returns at least one node and that all nodes returned
+smart match against C<$match>.
+
+=item do_xpath_values_match($doc, $xpath, $match)
+
+Calls the above method but catches any error and instead returns a truth value.
 
 =back
 
@@ -275,13 +291,23 @@ Nothing.
 
 =head1 SEE ALSO
 
-L<XML::LibXML>
+L<Test::XML::Assert>, L<XML::Compare>, L<XML::LibXML>
 
 =head1 AUTHOR
 
-Andrew Chilton, E<lt>andychilton@gmail.com<gt>, E<lt>andy@catalyst dot net dot nz<gt>
+Andrew Chilton
 
-http://www.chilts.org/blog/
+=over 4
+
+=item Work
+
+E<lt>andy at catalyst dot net dot nzE<gt>, http://www.catalyst.net.nz/
+
+=item Personal
+
+E<lt>andychilton at gmail dot comE<gt>, http://www.chilts.org/blog/
+
+=back
 
 =head1 COPYRIGHT & LICENSE
 

@@ -101,17 +101,43 @@ It uses XML::Assert to do all of it's checking.
 
 =head1 SUBROUTINES
 
+In all of the following subroutines there are three common parameters.
+
+C<$doc> is a XML::LibXML documentElement(), which may or may not use
+namespaces.
+
+C<$xmlns> is a hashref of key value pairs which provide the namespace prefix
+and the namespace they map to. These namespace prefixes should be used in your
+$xpath. An empty hashref or null may also be passed if the $doc doesn't use
+namespaces.
+
+C<$xpath> is a string which contains the path to the element(s) you'd like to
+match against, whether this is for a count or a value match.
+
 =over 4
 
-=item is_xml_same $xml1, $xml2, $name;
+=item is_xpath_count($doc, $xmlns, $xpath, $count, $name)
 
-Test passes if the XML string in C<$xml1> is semantically the same as the XML
-string in C<$xml2>. Optionally name the test with C<$name>.
+Test passes if there are $count nodes referenced by $xpath in the $doc.
 
-=item is_xml_different $xml1, $xml2, $name;
+C<$count> is the number of expected nodes which match the C<$xpath>.
 
-Test passes if the XML string in C<$xml1> is semantically different to the XML
-string in C<$xml2>. Optionally name the test with C<$name>.
+=item does_xpath_value_match($doc, $xmlns, $xpath, $match, $name)
+
+Test passes if and only if C<$xpath> matches one node in C<$doc> and that
+node's value smart matches C<$match>.
+
+C<$match> is the thing to match again. I say thing since it can be a string or
+a regex. In fact, it can be anything the smart smart operator can match
+against. See L<perlsyn> for more details.
+
+=item do_xpath_values_match($doc, $xmlns, $xpath, $match, $name)
+
+Test passes if C<$path> matches at least one node in C<$doc> and all nodes
+matched smart matches against C<$match>.
+
+Again, C<$match> can be a scalar, regex, arrayref or anything the smart match
+operator can match on.
 
 =back
 
@@ -121,17 +147,21 @@ Everything in L<"SUBROUTINES"> by default, as expected.
 
 =head1 SEE ALSO
 
-L<Test::Builder>
-
-L<XML::LibXML>
-
-L<XML::Assert>
+L<XML::Assert>, L<XML::Compare>, L<Test::Builder>, L<XML::LibXML>
 
 =head1 AUTHOR
 
-Andrew Chilton, E<lt>andychilton@gmail.com<gt>, E<lt>andy@catalyst dot net dot nz<gt>
+=over 4
 
-http://www.chilts.org/blog/
+=item Work
+
+E<lt>andy at catalyst dot net dot nzE<gt>, http://www.catalyst.net.nz/
+
+=item Personal
+
+E<lt>andychilton at gmail dot comE<gt>, http://www.chilts.org/blog/
+
+=back
 
 =head1 COPYRIGHT & LICENSE
 
@@ -140,7 +170,7 @@ Services, http://www.nzrs.net.nz/
 
 The work is being carried out by Catalyst IT, http://www.catalyst.net.nz/
 
-Copyright (c) 2009, NZ Registry Services.  All Rights Reserved.  This software
+Copyright (c) 2010, NZ Registry Services.  All Rights Reserved.  This software
 may be used under the terms of the Artistic License 2.0.  Note that this
 license is compatible with both the GNU GPL and Artistic licenses.  A copy of
 this license is supplied with the distribution in the file COPYING.txt.
