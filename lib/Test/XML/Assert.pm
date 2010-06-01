@@ -73,6 +73,32 @@ sub do_xpath_values_match($$$$;$) {
     return $tb->ok($is_ok, $name);
 }
 
+sub does_attr_value_match ($$$$$;$) {
+    my ($doc, $xmlns, $xpath, $attr, $match, $name) = @_;
+
+    my $xml_assert = XML::Assert->new();
+    $xml_assert->xmlns($xmlns);
+
+    # do the test and remember the result
+    my $is_ok = $xml_assert->does_attr_value_match($doc, $xpath, $attr, $match);
+
+    my $tb = $CLASS->builder();
+    return $tb->ok($is_ok, $name);
+}
+
+sub do_attr_values_match($$$$;$) {
+    my ($doc, $xmlns, $xpath, $attr, $match, $name) = @_;
+
+    my $xml_assert = XML::Assert->new();
+    $xml_assert->xmlns($xmlns);
+
+    # do the test and remember the result
+    my $is_ok = $xml_assert->do_attr_values_match($doc, $xpath, $attr, $match);
+
+    my $tb = $CLASS->builder();
+    return $tb->ok($is_ok, $name);
+}
+
 1;
 
 __END__
@@ -138,6 +164,16 @@ matched smart matches against C<$match>.
 
 Again, C<$match> can be a scalar, regex, arrayref or anything the smart match
 operator can match on.
+
+=item does_attr_value_match($doc, $xmlns, $xpath, $attr, $match, $name)
+
+Test passes if and only if C<$xpath> matches one node in C<$doc>, that node has
+an attr called C<$attr> and the value of that smart matches C<$match>.
+
+=item do_xpath_values_match($doc, $xmlns, $xpath, $match, $name)
+
+Test passes if C<$xpath> matches at least one node in C<$doc>, those nodes all
+have an attr called C<$attr> and those values smart matches C<$match>.
 
 =back
 

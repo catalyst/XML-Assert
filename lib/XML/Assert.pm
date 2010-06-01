@@ -40,16 +40,8 @@ has 'error' =>
     clearer => "_clear_error",
     ;
 
-# This assertion tests that there are exactly $count number of items at this
-# $xpath.
-#
-# This assertion throws an exception if untrue.
-#
-# e.g. to check that there is only 1 node at //Domain,
-#   $assert->xpath_count_is($doc, '//Domain', 1);
-sub assert_xpath_count {
-    my $self = _self(\@_);
-    my ($doc, $xpath, $count) = @_;
+sub register_ns {
+    my ($self, $doc) = @_;
 
     if ( my $xmlns = $self->xmlns ) {
         my $xpc = XML::LibXML::XPathContext->new($doc);
@@ -58,6 +50,15 @@ sub assert_xpath_count {
         # do the test against the XPath Context rather than the Document
         $doc = $xpc;
     }
+    return $doc;
+}
+
+# assert_xpath_count
+sub assert_xpath_count {
+    my $self = _self(\@_);
+    my ($doc, $xpath, $count) = @_;
+
+    $doc = $self->register_ns($doc);
 
     my ($nodes) = $doc->find($xpath);
     unless ( @$nodes == $count ) {
@@ -80,20 +81,12 @@ sub is_xpath_count {
     return 1;
 }
 
-# This assertion tests that the value of the node at this $xpath is the same as
-# the $value expected.
-#
-# Note: This assertion only expects one node to match, if you want to batch
-# assert a number of nodes at the same XPath, use assert_xpath_values_equal()
-# instead.
-#
-# This assertion throws an exception if untrue.
-#
-# e.g. to check that the '//Domain' Status attribute is 'Active'
-#   $assert->xpath_count_is($doc, '//Domain', 'Active');
+# assert_xpath_value_match
 sub assert_xpath_value_match {
     my $self = _self(\@_);
     my ($doc, $xpath, $match) = @_;
+
+    $doc = $self->register_ns($doc);
 
     # firstly, check that the node actually exists
     my ($nodes) = $doc->find($xpath);
@@ -123,20 +116,12 @@ sub does_xpath_value_match {
     return 1;
 }
 
-# This assertion tests that the value of the node at this $xpath is the same as
-# the $value expected.
-#
-# Note: This assertion only expects one node to match, if you want to batch
-# assert a number of nodes at the same XPath, use assert_xpath_values_equal()
-# instead.
-#
-# This assertion throws an exception if untrue.
-#
-# e.g. to check that the '//Domain' Status attribute is 'Active'
-#   $assert->xpath_count_is($doc, '//Domain', 'Active');
+# assert_xpath_values_match
 sub assert_xpath_values_match {
     my $self = _self(\@_);
     my ($doc, $xpath, $match) = @_;
+
+    $doc = $self->register_ns($doc);
 
     # firstly, check that the node actually exists
     my ($nodes) = $doc->find($xpath);
@@ -167,6 +152,83 @@ sub do_xpath_values_match {
         return;
     }
     return 1;
+}
+
+# assert_attr_value_match
+sub assert_attr_value_match {
+    my $self = _self(\@_);
+    my ($doc, $xpath, $attr, $match) = @_;
+
+    $doc = $self->register_ns($doc);
+
+    # firstly, check that the node actually exists
+    my ($nodes) = $doc->find($xpath);
+    unless ( @$nodes == 1 ) {
+        die "XPath '$xpath' matched " . (scalar @$nodes) . " nodes when we expected to match one";
+    }
+
+    # check that this node has this attribute
+    my $node = $nodes->[0];
+    my $value = $node->getAttribute( $attr );
+    unless ( $value ~~ $match ) {
+        die "XPath '$xpath', attribute '$attr' doesn't match '$match' as expected, instead it is '" . $value . "'";
+    }
+
+    return 1;
+}
+
+sub does_attr_value_match {
+    my $self = _self(\@_);
+    my ($doc, $xpath, $attr, $match) = @_;
+
+    $self->_clear_error();
+    eval { $self->assert_attr_value_match($doc, $xpath, $attr, $match) };
+    if ( $@ ) {
+        $self->error($@);
+        return;
+    }
+    return 1;
+
+}
+
+# assert_attr_values_match
+sub assert_attr_values_match {
+    my $self = _self(\@_);
+    my ($doc, $xpath, $attr, $match) = @_;
+
+    $doc = $self->register_ns($doc);
+
+    # firstly, check that the node actually exists
+    my ($nodes) = $doc->find($xpath);
+    unless ( @$nodes ) {
+        die "XPath '$xpath' matched no nodes when we expected to match at least one";
+    }
+
+    # check the values are what we expect
+    my $i = 0;
+    foreach my $node ( @$nodes ) {
+        my $value = $node->getAttribute( $attr );
+        unless ( $value ~~ $match ) {
+            die "Attribute '$attr' of element $i of XPath '$xpath' doesn't match '$match' as expected, instead it is '" . $value . "'";
+        }
+        $i++;
+    }
+
+    return 1;
+}
+
+sub do_attr_values_match {
+    my $self = _self(\@_);
+    my ($doc, $xpath, $attr, $match) = @_;
+
+    $self->_clear_error();
+    eval { $self->assert_attr_values_match($doc, $xpath, $attr, $match) };
+    if ( $@ ) {
+        $self->error($@);
+        return;
+    }
+    return 1;
+
 }
 
 # private functions
@@ -269,6 +331,24 @@ Checks that C<$xpath> returns at least one node and that all nodes returned
 smart match against C<$match>.
 
 =item do_xpath_values_match($doc, $xpath, $match)
+
+Calls the above method but catches any error and instead returns a truth value.
+
+=item assert_attr_value_match($doc, $xpath, $attr, $match)
+
+Checks that C<$xpath> returns only one node, that node has an attr called
+C<$attr> and that attr's value matches C<$match>.
+
+=item does_xpath_value_match($doc, $xpath, $attr, $match)
+
+Calls the above method but catches any error and instead returns a truth value.
+
+=item assert_xpath_values_match($doc, $xpath, $attr, $match)
+
+Checks that C<$xpath> returns at least one node, that every node has an attr
+called C<$attr> and that those attr values smart match against C<$match>.
+
+=item do_xpath_values_match($doc, $xpath, $attr, $match)
 
 Calls the above method but catches any error and instead returns a truth value.
 
