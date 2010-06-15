@@ -16,6 +16,7 @@ our @EXPORT = qw(
     is_xpath_count
     does_xpath_value_match
     do_xpath_values_match
+    does_attr_value_match
 );
 
 our $VERSION = '0.01';
