@@ -61,6 +61,7 @@ sub assert_xpath_count {
     $doc = $self->register_ns($doc);
 
     my ($nodes) = $doc->find($xpath);
+    print 'assert_xpath_count: Found ' . (scalar @$nodes) . "\n" if $VERBOSE;
     unless ( @$nodes == $count ) {
         die "XPath '$xpath' has " . (scalar @$nodes) . " " . $self->_plural(scalar @$nodes, 'node') . ", not $count as expected";
     }
@@ -90,12 +91,14 @@ sub assert_xpath_value_match {
 
     # firstly, check that the node actually exists
     my ($nodes) = $doc->find($xpath);
+    print 'assert_xpath_value_match: Found ' . (scalar @$nodes) . "\n" if $VERBOSE;
     unless ( @$nodes == 1 ) {
         die "XPath '$xpath' matched " . (scalar @$nodes) . " nodes when we expected to match one";
     }
 
     # check the value is what we expect
     my $node = $nodes->[0];
+    print "assert_xpath_value_match: This node's value : " . $node->string_value() . "\n" if $VERBOSE;
     unless ( $node->string_value() ~~ $match ) {
         die "XPath '$xpath' doesn't match '$match' as expected, instead it is '" . $node->string_value() . "'";
     }
@@ -125,6 +128,7 @@ sub assert_xpath_values_match {
 
     # firstly, check that the node actually exists
     my ($nodes) = $doc->find($xpath);
+    print 'assert_xpath_values_match: Found ' . (scalar @$nodes) . "\n" if $VERBOSE;
     unless ( @$nodes ) {
         die "XPath '$xpath' matched no nodes when we expected to match at least one";
     }
@@ -132,6 +136,7 @@ sub assert_xpath_values_match {
     # check the values are what we expect
     my $i = 0;
     foreach my $node ( @$nodes ) {
+	print "assert_xpath_value_match: This node's value : " . $node->string_value() . "\n" if $VERBOSE;
         unless ( $node->string_value() ~~ $match ) {
             die "Elment $i of XPath '$xpath' doesn't match '$match' as expected, instead it is '" . $node->string_value() . "'";
         }
@@ -163,6 +168,7 @@ sub assert_attr_value_match {
 
     # firstly, check that the node actually exists
     my ($nodes) = $doc->find($xpath);
+    print 'assert_attr_value_match: Found ' . (scalar @$nodes) . "\n" if $VERBOSE;
     unless ( @$nodes == 1 ) {
         die "XPath '$xpath' matched " . (scalar @$nodes) . " nodes when we expected to match one";
     }
@@ -170,6 +176,7 @@ sub assert_attr_value_match {
     # check that this node has this attribute
     my $node = $nodes->[0];
     my $value = $node->getAttribute( $attr );
+    print "assert_xpath_value_match: This attr's value : " . $value . "\n" if $VERBOSE;
     unless ( $value ~~ $match ) {
         die "XPath '$xpath', attribute '$attr' doesn't match '$match' as expected, instead it is '" . $value . "'";
     }
@@ -200,6 +207,7 @@ sub assert_attr_values_match {
 
     # firstly, check that the node actually exists
     my ($nodes) = $doc->find($xpath);
+    print 'assert_attr_values_match: Found ' . (scalar @$nodes) . "\n" if $VERBOSE;
     unless ( @$nodes ) {
         die "XPath '$xpath' matched no nodes when we expected to match at least one";
     }
@@ -208,6 +216,7 @@ sub assert_attr_values_match {
     my $i = 0;
     foreach my $node ( @$nodes ) {
         my $value = $node->getAttribute( $attr );
+	print "assert_xpath_values_match: This attr's value : " . $value . "\n" if $VERBOSE;
         unless ( $value ~~ $match ) {
             die "Attribute '$attr' of element $i of XPath '$xpath' doesn't match '$match' as expected, instead it is '" . $value . "'";
         }
