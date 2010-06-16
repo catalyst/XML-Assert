@@ -68,7 +68,7 @@ sub do_xpath_values_match($$$$;$) {
     $xml_assert->xmlns($xmlns);
 
     # do the test and remember the result
-    my $is_ok = $xml_assert->does_xpath_value_match($doc, $xpath, $match);
+    my $is_ok = $xml_assert->do_xpath_values_match($doc, $xpath, $match);
 
     my $tb = $CLASS->builder();
     return $tb->ok($is_ok, $name);
