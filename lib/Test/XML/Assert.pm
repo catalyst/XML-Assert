@@ -64,7 +64,7 @@ sub do_xpath_values_match($$$$;$) {
     return $tb->ok($is_ok, $name);
 }
 
-sub does_attr_value_match ($$$$$;$) {
+sub does_attr_value_match($$$$$;$) {
     my ($doc, $xmlns, $xpath, $attr, $match, $name) = @_;
 
     my $xml_assert = XML::Assert->new();
@@ -161,7 +161,7 @@ operator can match on.
 Test passes if and only if C<$xpath> matches one node in C<$doc>, that node has
 an attr called C<$attr> and the value of that smart matches C<$match>.
 
-=item do_xpath_values_match($doc, $xmlns, $xpath, $match, $name)
+=item do_attr_values_match($doc, $xmlns, $xpath, $match, $name)
 
 Test passes if C<$xpath> matches at least one node in C<$doc>, those nodes all
 have an attr called C<$attr> and those values smart matches C<$match>.

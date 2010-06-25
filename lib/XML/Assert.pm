@@ -348,18 +348,25 @@ Calls the above method but catches any error and instead returns a truth value.
 Checks that C<$xpath> returns only one node, that node has an attr called
 C<$attr> and that attr's value matches C<$match>.
 
-=item does_xpath_value_match($doc, $xpath, $attr, $match)
+=item does_attr_value_match($doc, $xpath, $attr, $match)
 
 Calls the above method but catches any error and instead returns a truth value.
 
-=item assert_xpath_values_match($doc, $xpath, $attr, $match)
+=item assert_attr_values_match($doc, $xpath, $attr, $match)
 
 Checks that C<$xpath> returns at least one node, that every node has an attr
 called C<$attr> and that those attr values smart match against C<$match>.
 
-=item do_xpath_values_match($doc, $xpath, $attr, $match)
+=item do_attr_values_match($doc, $xpath, $attr, $match)
 
 Calls the above method but catches any error and instead returns a truth value.
+
+=item register_ns
+
+Takes a hash containing ns => value pairs which are namesapces to register when
+Asserting into an XML document. If the correct namesapces are not registered,
+then it's likely that you XPath expressions won't match any of the desired
+nodes.
 
 =back
 
