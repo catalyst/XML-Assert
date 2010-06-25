@@ -24,16 +24,6 @@ our $VERSION = '0.01';
 my $CLASS = __PACKAGE__;
 my $PARSER = XML::LibXML->new();
 
-sub plan {
-    my $tb = $CLASS->builder();
-    return $tb->plan(@_);
-}
-
-sub done_testing {
-    my $tb = $CLASS->builder();
-    $tb->done_testing(@_);
-}
-
 sub is_xpath_count($$$$;$) {
     my ($doc, $xmlns, $xpath, $count, $name) = @_;
 
