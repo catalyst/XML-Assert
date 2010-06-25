@@ -1,0 +1,15 @@
+Source: libxml-assert-perl
+Section: perl
+Priority: optional
+Build-Depends: debhelper (>= 5)
+Build-Depends-Indep: perl (>= 5.6.10-12)
+Maintainer: Andrew Chilton <andy@catalyst.net.nz>
+Standards-Version: 3.8.0
+Homepage: http://search.cpan.org/dist/XML-Assert/
+
+Package: libxml-assert-perl
+Architecture: all
+Depends: ${perl:Depends}, ${misc:Depends}, libxml-libxml-perl (>= 1.58), libany-moose-perl
+Description: Test XPaths in an XML Document for correct values/matches
+ This modules allows you to test XPath values, attributes and node counts in
+ any XML Document for correct values.
