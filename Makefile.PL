@@ -5,7 +5,8 @@ all_from 'lib/XML/Assert.pm';
 author   'Andrew Chilton <andychilton@gmail.com>';
 repository 'git://github.com/catalyst/XML-Assert';
 
-requires        "perl" => 5.010;
+perl_version '5.10';
+
 requires        "XML::LibXML" => 1.58;  # oldest tested
 requires        "Any::Moose" => 0;
 
