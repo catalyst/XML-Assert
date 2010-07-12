@@ -1,3 +1,9 @@
+libxml-assert-perl (0.02) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Andrew Chilton <andy@catalyst.net.nz>  Mon, 12 Jul 2010 13:02:56 +0000
+
 libxml-assert-perl (0.01) unstable; urgency=low
 
   * Initial Release.
