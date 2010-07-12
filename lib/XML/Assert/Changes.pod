@@ -1,5 +1,15 @@
 =head1 CHANGELOG FOR XML::Assert
 
+=head2 VERSION 0.02, 12 JULY 2010
+
+=over
+
+=item *
+
+Update Perl version dependency
+
+=back
+
 =head2 VERSION 0.01, 25 JUNE 2010
 
 =over

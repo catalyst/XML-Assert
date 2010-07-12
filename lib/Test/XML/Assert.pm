@@ -19,7 +19,7 @@ our @EXPORT = qw(
     does_attr_value_match
 );
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 my $CLASS = __PACKAGE__;
 my $PARSER = XML::LibXML->new();

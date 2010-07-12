@@ -6,7 +6,7 @@ package XML::Assert;
 use XML::LibXML;
 use Any::Moose;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 our $VERBOSE = $ENV{XML_ASSERT_VERBOSE} || 0;
 
 my $PARSER = XML::LibXML->new();
